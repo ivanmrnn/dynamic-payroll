@@ -1,0 +1,73 @@
+.login {
+    height: 100vh;
+    background-color: var(--gray);
+}
+
+.company {
+    position: fixed;
+    top: 3rem;
+    left: 80px;
+}
+
+/* Login Container */
+
+.login-container {
+    padding: 2rem 4rem;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.login-form .input-box, .request-reset-form .input-box  {
+    width: 300px;
+}
+
+.reset-password-form .input-box  {
+    height: 50px;
+    width: 50px;
+}
+
+
+.input-password {
+    width: 100%;
+}
+
+.reveal-password-button {
+    margin-right: 1rem;
+}
+
+.errorhandler {
+    color: red;
+}
+
+.login-button, .request-reset-button {
+    max-width: 300px;
+    min-width: 300px;
+    width: 300px;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--black);
+    color: white;
+}
+
+.reset-password-button {
+    max-width: 250px;
+    min-width: 250px;
+    width: 250px;
+    
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--black);
+    color: white;
+}
+
+.forgot-password-button {
+    color: var(--black);
+}
+
+
+/* Password Reset Container */
+  
+.input-username, .input-password, .input-email {
+    width: 100%;
+    padding: 12px 1rem; /* Adjust padding to ensure the input box has space inside */
+}

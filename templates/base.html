@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container flex">
+        <div class="menu flex column"></div>
+        <div class="header flex align-center">
+            <div class="company-container flex align-center small-gap">
+                {{if .CompanyExists}}
+                <div class="company-logo-container flex center">
+                    <img class="company-logo" src="{{.CompanyLogo}}">
+                </div>
+                <h2 class="company-name bold">{{.CompanyName}}</h2>
+                {{end}}
+            </div>
+            <div class="profile flex align-center gap">
+                {{if .SessionUserPhoto}}
+                <img class="header-user-photo" src="{{.SessionUserPhoto}}">
+                {{end}}
+                <div class="header-user-name"><p class="bold">{{.SessionUser}}</p></div>
+                
+            </div>
+        </div>
+        <div class="content">
+            {{block "content" .}}{{end}}
+        </div>
+    </div>
+    <div id="user-modal" class="modal">
+        <div class="user-modal-content radius">
+            <div class="modal-container flex column big-gap">
+                <div class="modal-employee-id-container flex column small-gap">
+                    <p>Employee ID</p>
+                    <h2>ID Number</h2>
+                </div>
+                <div class="modal-actions-container">
+                    <form method="GET" action="/logout/">
+                        <button class="logout-button">
+                            <p class="bold">Logout</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userPhoto = document.querySelector('.header-user-photo');
+        const modal = document.getElementById("user-modal");
+        const logoutButton = document.querySelector('.logout-button');
+        let companyPrimary = '{{.CompanyPrimary}}';
+
+        userPhoto.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        
+        logoutButton.style.color = companyPrimary;
+
+        // Apply border color with a slight delay to ensure other changes are processed
+        setTimeout(function() {
+            
+            userPhoto.style.border = `2px solid ${companyPrimary}`;
+        }, 100);
+    });
+
+</script>
+</html>
