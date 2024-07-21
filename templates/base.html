@@ -8,7 +8,9 @@
 </head>
 <body>
     <div class="container flex">
-        <div class="menu flex column"></div>
+        <div class="menu flex column">
+            
+        </div>
         <div class="header flex align-center">
             <div class="company-container flex align-center small-gap">
                 {{if .CompanyExists}}
@@ -23,7 +25,6 @@
                 <img class="header-user-photo" src="{{.SessionUserPhoto}}">
                 {{end}}
                 <div class="header-user-name"><p class="bold">{{.SessionUser}}</p></div>
-                
             </div>
         </div>
         <div class="content">
@@ -70,7 +71,6 @@
 
         // Apply border color with a slight delay to ensure other changes are processed
         setTimeout(function() {
-            
             userPhoto.style.border = `2px solid ${companyPrimary}`;
         }, 100);
     });

@@ -10,8 +10,22 @@ import (
 
 func main() {
 	uadmin.Register(
-		models.Companies{},
+		models.Company{},
+		models.Employee{},
+		models.Role{},
+		models.Position{},
+		models.Department{},
+		models.Team{},
+		models.Responsibility{},
 	)
+
+	uadmin.RegisterInlines(
+		models.Role{},
+		map[string]string{
+			"Employee": "RoleID",
+		},
+	)
+
 	uadmin.RootURL = "/admin/"
 	uadmin.SiteName = "Dynamic Payroll"
 

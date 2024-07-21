@@ -113,8 +113,8 @@ func renderTemplates(w http.ResponseWriter, r *http.Request, page string, contex
 	uadmin.RenderMultiHTML(w, r, templateList, context)
 }
 
-func getActiveCompany() *models.Companies {
-	companies := []models.Companies{}
+func getActiveCompany() *models.Company {
+	companies := []models.Company{}
 	err := uadmin.Filter(&companies, "active = ?", true)
 	if err != nil {
 		return nil
