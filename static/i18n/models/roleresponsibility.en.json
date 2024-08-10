@@ -1,0 +1,40 @@
+{
+  "display_name": "Role Responsibility",
+  "fields": {
+    "ID": {
+      "display_name": "ID",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "Responsibilities": {
+      "display_name": "Responsibilities",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "Responsibility": {
+      "display_name": "Responsibility",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "ResponsibilityID": {
+      "display_name": "Responsibility ID",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "Role": {
+      "display_name": "Role",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    }
+  }
+}

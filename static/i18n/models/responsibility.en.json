@@ -22,6 +22,20 @@
       "err_msg": {},
       "Choices": {}
     },
+    "MenuIcon": {
+      "display_name": "Menu Icon",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "MenuName": {
+      "display_name": "Menu Name",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "Name": {
       "display_name": "Name",
       "help": "",

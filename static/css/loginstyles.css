@@ -32,6 +32,7 @@
 }
 
 .reveal-password-button {
+    cursor: pointer;
     margin-right: 1rem;
 }
 
@@ -40,28 +41,36 @@
 }
 
 .login-button, .request-reset-button {
+    cursor: pointer;
     max-width: 300px;
     min-width: 300px;
     width: 300px;
     margin-top: 1rem;
     padding: 1rem;
-    background: var(--black);
+    background: var(--company-primary);
     color: white;
 }
 
 .reset-password-button {
+    cursor: pointer;
     max-width: 250px;
     min-width: 250px;
     width: 250px;
     
     margin-top: 1rem;
     padding: 1rem;
-    background: var(--black);
+    background: var(--company-primary);
     color: white;
 }
 
 .forgot-password-button {
-    color: var(--black);
+    cursor: pointer;
+    color: var(--company-primary);
+}
+
+.back-to-login-button {
+    cursor: pointer;
+    color: var(--company-primary);
 }
 
 

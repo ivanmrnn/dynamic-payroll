@@ -1,6 +1,7 @@
 package views
 
 import (
+	"html/template"
 	"net/http"
 	"strings"
 
@@ -16,6 +17,8 @@ type BaseContext struct {
 	CompanyLogo      string `uadmin:"image"`
 	CompanyPrimary   string
 	CompanySecondary string
+	MenuItems        []MenuItem
+	IdEmployee string
 }
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +48,19 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		if session.User.Photo != "" {
 			bc.SessionUserPhoto = session.User.Photo
 		}
+
+		var employee models.Employee
+        err := uadmin.Get(&employee, "user_id = ?", session.UserID)
+        if err == nil {
+            bc.IdEmployee = employee.IdEmployee
+        }
+		
+		
+		// Generate menu items based on user roles and responsibilities
+		bc.MenuItems = GeneratePayrollMenu(session.UserID)
+
+		UpdateResponsibilitiesMenuNames()
+		CheckResponsibilitiesAndMenuNames()
 	}
 
 	activeCompany := getActiveCompany()
@@ -73,7 +89,6 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderPage(w http.ResponseWriter, r *http.Request, page string, session *uadmin.Session, bc BaseContext) {
-	// Base context for all templates
 	baseContext := map[string]interface{}{
 		"SessionUser":      bc.SessionUser,
 		"SessionUserPhoto": bc.SessionUserPhoto,
@@ -82,9 +97,10 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, session *ua
 		"CompanyLogo":      bc.CompanyLogo,
 		"CompanyPrimary":   bc.CompanyPrimary,
 		"CompanySecondary": bc.CompanySecondary,
+		"MenuItems":        bc.MenuItems,
+		"IdEmployee":       bc.IdEmployee,
 	}
 
-	// Get page-specific context
 	var pageContext map[string]interface{}
 	switch page {
 	case "dashboard":
@@ -94,12 +110,10 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, session *ua
 		pageContext = DashboardHandler(w, r, session, bc)
 	}
 
-	// Merge page-specific context with base context
 	for key, value := range pageContext {
 		baseContext[key] = value
 	}
 
-	// Render the page with the combined context
 	renderTemplates(w, r, page, baseContext)
 }
 
@@ -115,6 +129,7 @@ func renderTemplates(w http.ResponseWriter, r *http.Request, page string, contex
 
 func getActiveCompany() *models.Company {
 	companies := []models.Company{}
+
 	err := uadmin.Filter(&companies, "active = ?", true)
 	if err != nil {
 		return nil
@@ -123,5 +138,104 @@ func getActiveCompany() *models.Company {
 	if len(companies) > 0 {
 		return &companies[0]
 	}
+
 	return nil
+}
+
+type MenuItem struct {
+	MenuName string
+	MenuIcon template.HTML // Change to template.HTML
+}
+
+// Add this at the package level
+var menuOrder = []string{
+    "Dashboard",
+    "Timesheet",
+    "Payroll",
+    "Leaves",
+	"Approvals",
+    "Department",
+    "Employees",
+    "Roles",
+}
+
+func GeneratePayrollMenu(userID uint) []MenuItem {
+    var employee models.Employee
+    err := uadmin.Get(&employee, "user_id = ?", userID)
+    if err != nil || employee.ID == 0 {
+        return []MenuItem{}
+    }
+
+    menuItems := make(map[string]MenuItem)
+
+    for _, role := range employee.Role {
+        var roleResponsibilities []models.RoleResponsibility
+        uadmin.Filter(&roleResponsibilities, "role_id = ?", role.ID)
+
+        for _, roleResp := range roleResponsibilities {
+            var responsibility models.Responsibility
+            err := uadmin.Get(&responsibility, "id = ?", roleResp.ResponsibilityID)
+            if err != nil {
+                continue
+            }
+
+            var menuName models.MenuName
+            err = uadmin.Get(&menuName, "id = ?", responsibility.MenuNameID)
+            if err != nil {
+                continue
+            }
+
+            menuIcon := template.HTML(UnescapeSVG(menuName.MenuIcon))
+
+            menuItems[menuName.Name] = MenuItem{
+                MenuName: menuName.Name,
+                MenuIcon: menuIcon,
+            }
+        }
+    }
+
+    // Sort menu items according to the predefined order
+    result := make([]MenuItem, 0, len(menuItems))
+    for _, menuName := range menuOrder {
+        if item, exists := menuItems[menuName]; exists {
+            result = append(result, item)
+        }
+    }
+
+    return result
+}
+func CheckResponsibilitiesAndMenuNames() {
+	var responsibilities []models.Responsibility
+	uadmin.All(&responsibilities)
+
+	for _, resp := range responsibilities {
+		var menuName models.MenuName
+		err := uadmin.Get(&menuName, resp.MenuNameID)
+		if err != nil {
+			continue
+		}
+	}
+}
+
+func UpdateResponsibilitiesMenuNames() {
+	var responsibilities []models.Responsibility
+	uadmin.All(&responsibilities)
+
+	for _, resp := range responsibilities {
+		var menuName models.MenuName
+		err := uadmin.Get(&menuName, resp.MenuNameID)
+		if err == nil && menuName.ID != 0 {
+			resp.MenuName = menuName
+			uadmin.Save(&resp)
+		}
+	}
+}
+
+func UnescapeSVG(svg string) string {
+	svg = strings.ReplaceAll(svg, `\u003c`, `<`)
+	svg = strings.ReplaceAll(svg, `\u003e`, `>`)
+	svg = strings.ReplaceAll(svg, `&amp;`, `&`)
+	svg = strings.ReplaceAll(svg, `&quot;`, `"`)
+	svg = strings.ReplaceAll(svg, `&#x27;`, `'`)
+	return svg
 }

@@ -1,6 +1,13 @@
 {
   "display_name": "Employee",
   "fields": {
+    "Active": {
+      "display_name": "Active",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "DateOfBirth": {
       "display_name": "Date Of Birth",
       "help": "",
@@ -57,6 +64,13 @@
       "err_msg": {},
       "Choices": {}
     },
+    "Name": {
+      "display_name": "Name",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "PagIbig": {
       "display_name": "Pag Ibig",
       "help": "",
@@ -99,6 +113,13 @@
       "err_msg": {},
       "Choices": {}
     },
+    "Roles": {
+      "display_name": "Roles",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "SSS": {
       "display_name": "SSS",
       "help": "",
@@ -129,6 +150,13 @@
     },
     "User": {
       "display_name": "User",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "UserID": {
+      "display_name": "User ID",
       "help": "",
       "pattern_msg": "",
       "err_msg": {},

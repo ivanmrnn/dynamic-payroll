@@ -66,67 +66,61 @@
             <button class="back-to-login-button"><p class="bold">Back to Login</p></button>
         </div>
     </div>
-</body>
-<script>
-    const loginContainer = document.getElementById('login-container');
-    const requestResetContainer = document.getElementById('request-reset-container');
-    const resetPasswordContainer = document.getElementById('reset-password-container');
 
-    const revealPasswordButton = document.querySelector('.reveal-password-button');
-    const passwordInput = document.getElementById('login-password');
-    const showPasswordIcon = document.querySelector('.show-password-icon');
-    const hidePasswordIcon = document.querySelector('.hide-password-icon');
-
-    const loginButton = document.querySelector('.login-button');
-    const requestResetButton = document.querySelector('.request-reset-button');
-    const resetPasswordButton = document.querySelector('.reset-password-button');
-
-    const forgotPasswordButton = document.querySelector('.forgot-password-button');
-    const backToLoginButton = document.querySelector('.back-to-login-button');
-
-    revealPasswordButton.addEventListener('click', () => {
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            showPasswordIcon.style.display = 'none';
-            hidePasswordIcon.style.display = 'block';
-        } else {
-            passwordInput.type = 'password';
-            showPasswordIcon.style.display = 'block';
-            hidePasswordIcon.style.display = 'none';
-        }
-    });
-
-    forgotPasswordButton.addEventListener('click', () => {
-        loginContainer.style.display = 'none';
-        requestResetContainer.style.display = 'flex';
-    });
-
-    requestResetButton.addEventListener('click', () => {
-        requestResetContainer.style.display = 'none';
-        resetPasswordContainer.style.display = 'flex';
-    });
-
-    document.querySelectorAll('.back-to-login-button').forEach(button => {
-        button.addEventListener('click', () => {
-            resetPasswordContainer.style.display = 'none';
+    <script>
+        const loginContainer = document.getElementById('login-container');
+        const requestResetContainer = document.getElementById('request-reset-container');
+        const resetPasswordContainer = document.getElementById('reset-password-container');
+    
+        const revealPasswordButton = document.querySelector('.reveal-password-button');
+        const passwordInput = document.getElementById('login-password');
+        const showPasswordIcon = document.querySelector('.show-password-icon');
+        const hidePasswordIcon = document.querySelector('.hide-password-icon');
+    
+        const loginButton = document.querySelector('.login-button');
+        const requestResetButton = document.querySelector('.request-reset-button');
+        const resetPasswordButton = document.querySelector('.reset-password-button');
+    
+        const forgotPasswordButton = document.querySelector('.forgot-password-button');
+        const backToLoginButton = document.querySelector('.back-to-login-button');
+    
+        revealPasswordButton.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordIcon.style.display = 'none';
+                hidePasswordIcon.style.display = 'block';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordIcon.style.display = 'block';
+                hidePasswordIcon.style.display = 'none';
+            }
+        });
+    
+        forgotPasswordButton.addEventListener('click', () => {
+            loginContainer.style.display = 'none';
+            requestResetContainer.style.display = 'flex';
+        });
+    
+        requestResetButton.addEventListener('click', () => {
             requestResetContainer.style.display = 'none';
-            loginContainer.style.display = 'flex';
+            resetPasswordContainer.style.display = 'flex';
         });
-    });
-
-    (function pageTheme() {
-        let companyPrimary = '{{.CompanyPrimary}}';
-
-        loginButton.style.background = companyPrimary;
-        requestResetButton.style.background = companyPrimary;
-        resetPasswordButton.style.background = companyPrimary;
-
-        forgotPasswordButton.style.color = companyPrimary;
+    
         document.querySelectorAll('.back-to-login-button').forEach(button => {
-            button.style.color = companyPrimary;
+            button.addEventListener('click', () => {
+                resetPasswordContainer.style.display = 'none';
+                requestResetContainer.style.display = 'none';
+                loginContainer.style.display = 'flex';
+            });
         });
-        
-    })();
-</script>
+
+        let companyPrimary = '{{.CompanyPrimary}}' || '#333'; // Fallback to #333 if no CompanyPrimary
+
+        document.documentElement.style.setProperty('--company-primary', companyPrimary);
+    
+    </script>
+
+</body>
+
 </html>
 

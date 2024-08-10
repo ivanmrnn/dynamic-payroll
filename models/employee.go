@@ -8,8 +8,8 @@ import (
 
 type Employee struct {
 	uadmin.Model
-	UserID uint
-	User   uadmin.User
+	Name    string `uadmin:"read_only"`
+	UserID  uint   `uadmin:"read_only"`
 
 	IdEmployee string
 	FirstName  string
@@ -17,7 +17,7 @@ type Employee struct {
 	LastName   string
 	SuffixName string
 
-	Password string `uadmin:"password"`
+	Password string `uadmin:"password;list_exclude"`
 
 	DateOfBirth time.Time
 	Email       string
@@ -27,25 +27,56 @@ type Employee struct {
 	PhilHealth string
 	PagIbig    string
 
-	Role             Role
-	RoleID           uint
+	Role       []Role `gorm:"many2many:employee_roles;"`
 
 	Position         []Position       `gorm:"many2many:employee_positions;"`
 	Department       []Department     `gorm:"many2many:employee_departments;"`
 	Team             []Team           `gorm:"many2many:employee_teams;"`
-	Responsibilities []Responsibility `gorm:"many2many:employee_responsibilities;"`
+
+	Active bool `uadmin:"list_exclude"`
 }
 
+// Save method for the Employee model
 func (e *Employee) Save() {
-	user := uadmin.User{}
-	user.Username = e.IdEmployee
-	user.FirstName = e.FirstName
-	user.LastName = e.LastName
-	user.Password = "password"
-	user.Email = e.Email
+    e.Name = e.FirstName + " " + e.LastName
 
-	user.Active = true
+    // Deactivate any previous Employee record with the same IdEmployee
+    previousEmployees := []Employee{}
+    uadmin.Filter(&previousEmployees, "id_employee = ? AND active = ?", e.IdEmployee, true)
+    for _, emp := range previousEmployees {
+        emp.Active = false
+        uadmin.Save(&emp)
+    }
 
-	user.Save()
-	uadmin.Save(e)
+    var user uadmin.User
+    uadmin.Get(&user, "username = ?", e.IdEmployee)
+
+    if user.ID == 0 {
+        // User does not exist, create a new one
+        user = uadmin.User{
+            Username:  e.IdEmployee,
+            FirstName: e.FirstName,
+            LastName:  e.LastName,
+            Password:  e.Password,
+            Email:     e.Email,
+            Active:    true,
+        }
+    } else {
+        // User exists, update their details
+        user.FirstName = e.FirstName
+        user.LastName = e.LastName
+        user.Password = e.Password
+        user.Email = e.Email
+        user.Active = true
+    }
+
+    user.Save()
+
+    // Set the UserID in Employee to the ID of the user
+    e.UserID = user.ID
+
+    // Mark the current Employee record as active
+    e.Active = true
+
+    uadmin.Save(e)
 }

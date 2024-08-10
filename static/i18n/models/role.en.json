@@ -15,8 +15,22 @@
       "err_msg": {},
       "Choices": {}
     },
+    "Level": {
+      "display_name": "Level",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "Name": {
       "display_name": "Name",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
+    "Responsibilities": {
+      "display_name": "Responsibilities",
       "help": "",
       "pattern_msg": "",
       "err_msg": {},
