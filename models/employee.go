@@ -37,46 +37,53 @@ type Employee struct {
 }
 
 // Save method for the Employee model
+// Save method for the Employee model
 func (e *Employee) Save() {
-    e.Name = e.FirstName + " " + e.LastName
+	e.Name = e.FirstName + " " + e.LastName
 
-    // Deactivate any previous Employee record with the same IdEmployee
-    previousEmployees := []Employee{}
-    uadmin.Filter(&previousEmployees, "id_employee = ? AND active = ?", e.IdEmployee, true)
-    for _, emp := range previousEmployees {
-        emp.Active = false
-        uadmin.Save(&emp)
-    }
+	// Deactivate any previous Employee record with the same IdEmployee
+	previousEmployees := []Employee{}
+	uadmin.Filter(&previousEmployees, "id_employee = ? AND active = ?", e.IdEmployee, true)
+	for _, emp := range previousEmployees {
+		emp.Active = false
+		uadmin.Save(&emp)
+	}
 
-    var user uadmin.User
-    uadmin.Get(&user, "username = ?", e.IdEmployee)
+	var user uadmin.User
+	uadmin.Get(&user, "username = ?", e.IdEmployee)
 
-    if user.ID == 0 {
-        // User does not exist, create a new one
-        user = uadmin.User{
-            Username:  e.IdEmployee,
-            FirstName: e.FirstName,
-            LastName:  e.LastName,
-            Password:  e.Password,
-            Email:     e.Email,
-            Active:    true,
-        }
-    } else {
-        // User exists, update their details
-        user.FirstName = e.FirstName
-        user.LastName = e.LastName
-        user.Password = e.Password
-        user.Email = e.Email
-        user.Active = true
-    }
+	if user.ID == 0 {
+		// User does not exist, create a new one
+		user = uadmin.User{
+			Username:  e.IdEmployee,
+			FirstName: e.FirstName,
+			LastName:  e.LastName,
+			Password:  e.Password,
+			Email:     e.Email,
+			Active:    true,
+		}
+	} else {
+		// User exists, update their details
+		user.FirstName = e.FirstName
+		user.LastName = e.LastName
+		user.Password = e.Password
+		user.Email = e.Email
+		user.Active = true
+	}
 
-    user.Save()
+	// Set admin privileges for the system admin
+	if e.IdEmployee == "admin" {
+		user.Admin = true
+	}
 
-    // Set the UserID in Employee to the ID of the user
-    e.UserID = user.ID
+	user.Save()
 
-    // Mark the current Employee record as active
-    e.Active = true
+	// Set the UserID in Employee to the ID of the user
+	e.UserID = user.ID
 
-    uadmin.Save(e)
+	// Mark the current Employee record as active
+	e.Active = true
+
+	uadmin.Save(e)
 }
+

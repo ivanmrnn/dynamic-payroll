@@ -147,8 +147,9 @@ input {
 /* Menu */
 
 .menu {
-    height: 100%;
-    width: 220px;
+    height: fit-content;
+    min-height: 100%;
+    width: 230px;
     padding-top: 72px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
@@ -157,6 +158,7 @@ input {
     cursor: pointer;
     padding: 2rem;
     width: 100%;
+    text-transform: capitalize;
 }
 
 .menu-item:hover {
@@ -174,9 +176,9 @@ input {
 .content {
     position: fixed;
     top: 72px;
-    left: 220px;
+    left: 230px;
     height: calc(100% - 72px);
-    width: calc(100% - 220px);
+    width: calc(100% - 230px);
 }
 
 /* Modal */

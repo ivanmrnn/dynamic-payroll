@@ -83,6 +83,7 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		LoginHandler(w, r, bc)
+	
 	default:
 		renderPage(w, r, page, session, bc)
 	}
@@ -105,11 +106,37 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, session *ua
 	switch page {
 	case "dashboard":
 		pageContext = DashboardHandler(w, r, session, bc)
+	case "timesheet":
+        pageContext = TimesheetHandler(w, r, session, bc)
+	case "timesheetLogs":
+        pageContext = TimesheetLogsHandler(w, r, session, bc)
+	case "payroll":
+        pageContext = PayrollHandler(w, r, session, bc)
+	case "payrollLogs":
+        pageContext = PayrollLogsHandler(w, r, session, bc)
+	case "leaves":
+        pageContext = LeavesHandler(w, r, session, bc)
+	case "leavesLogs":
+        pageContext = LeavesLogsHandler(w, r, session, bc)
+	case "approvals":
+        pageContext = ApprovalsHandler(w, r, session, bc)
+	case "department":
+        pageContext = DepartmentHandler(w, r, session, bc)
+	case "employees":
+        pageContext = EmployeesHandler(w, r, session, bc)
+	case "salaries":
+        pageContext = SalariesHandler(w, r, session, bc)
+	case "roles":
+        pageContext = RolesHandler(w, r, session, bc)
+	case "identification":
+        pageContext = IdentificationHandler(w, r, session, bc)
+	case "auditLogs":
+        pageContext = AuditLogsHandler(w, r, session, bc)
 	default:
 		page = "dashboard"
 		pageContext = DashboardHandler(w, r, session, bc)
 	}
-
+	
 	for key, value := range pageContext {
 		baseContext[key] = value
 	}
@@ -144,19 +171,26 @@ func getActiveCompany() *models.Company {
 
 type MenuItem struct {
 	MenuName string
-	MenuIcon template.HTML // Change to template.HTML
+	MenuDisplayName string
+	MenuIcon template.HTML 
 }
 
 // Add this at the package level
 var menuOrder = []string{
-    "Dashboard",
-    "Timesheet",
-    "Payroll",
-    "Leaves",
-	"Approvals",
-    "Department",
-    "Employees",
-    "Roles",
+    "dashboard",
+    "timesheet",
+	"timesheetLogs",
+    "payroll",
+	"payrollLogs",
+    "leaves",
+	"leavesLogs",
+	"approvals",
+    "department",
+    "employees",
+	"identification",
+    "roles",
+	"salaries",
+	"auditLogs",	
 }
 
 func GeneratePayrollMenu(userID uint) []MenuItem {
@@ -187,9 +221,11 @@ func GeneratePayrollMenu(userID uint) []MenuItem {
 
             menuIcon := template.HTML(UnescapeSVG(menuName.MenuIcon))
 
+            // Use menuName.DisplayName for MenuDisplayName
             menuItems[menuName.Name] = MenuItem{
-                MenuName: menuName.Name,
-                MenuIcon: menuIcon,
+                MenuName:        menuName.Name,
+                MenuDisplayName: menuName.DisplayName, // Use menuName.DisplayName here
+                MenuIcon:        menuIcon,
             }
         }
     }
@@ -204,6 +240,7 @@ func GeneratePayrollMenu(userID uint) []MenuItem {
 
     return result
 }
+
 func CheckResponsibilitiesAndMenuNames() {
 	var responsibilities []models.Responsibility
 	uadmin.All(&responsibilities)

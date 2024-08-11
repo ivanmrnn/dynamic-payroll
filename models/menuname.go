@@ -5,6 +5,7 @@ import "github.com/uadmin/uadmin"
 type MenuName struct {
 	uadmin.Model
 	Name     string
+	DisplayName string
 	MenuIcon string
 }
 

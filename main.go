@@ -26,9 +26,41 @@ func main() {
 	uadmin.RootURL = "/admin/"
 	uadmin.SiteName = "Dynamic Payroll"
 
+	createAdminRoleAndUser()
+
 	http.HandleFunc("/logout/", uadmin.Handler(views.LogoutHandler))
 	http.HandleFunc("/", uadmin.Handler(views.MainHandler))
 
 	uadmin.StartServer()
 }
 
+func createAdminRoleAndUser() {
+    // Create admin role
+    var adminRole models.Role
+    uadmin.Get(&adminRole, "name = ?", "Admin")
+    if adminRole.ID == 0 {
+        adminRole = models.Role{
+            Name:  "Admin",
+            Level: 4,
+        }
+        uadmin.Save(&adminRole)
+        
+        // Set responsibilities for the admin role
+        models.SetResponsibilitiesForLevel(&adminRole)
+    }
+
+    // Create admin user
+    var adminUser models.Employee
+    uadmin.Get(&adminUser, "id_employee = ?", "admin")
+    if adminUser.ID == 0 {
+        adminUser = models.Employee{
+            IdEmployee: "admin",
+            FirstName:  "System",
+            LastName:   "Admin",
+            Password:   "admin", // Change this to a secure password
+            Active:     true,
+        }
+        adminUser.Role = append(adminUser.Role, adminRole)
+        adminUser.Save()
+    }
+}
