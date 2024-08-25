@@ -9,6 +9,6 @@ import (
 func ApprovalsHandler(w http.ResponseWriter, r *http.Request, session *uadmin.Session, bc BaseContext) map[string]interface{} {
 	return map[string]interface{}{
 		"Title": "Approvals",
-		// Add any timesheet-specific data here
+		"ActivePage": "approvals",
 	}
 }

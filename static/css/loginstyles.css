@@ -14,25 +14,25 @@
 .login-container {
     padding: 2rem 4rem;
     background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.login-form .input-box, .request-reset-form .input-box  {
+.login-form .input-box, 
+.request-reset-form 
+.input-box  {
     width: 300px;
 }
 
-.reset-password-form .input-box  {
+.reset-password-form 
+.input-box  {
     height: 50px;
     width: 50px;
 }
-
 
 .input-password {
     width: 100%;
 }
 
 .reveal-password-button {
-    cursor: pointer;
     margin-right: 1rem;
 }
 
@@ -40,8 +40,8 @@
     color: red;
 }
 
-.login-button, .request-reset-button {
-    cursor: pointer;
+.login-button, 
+.request-reset-button {
     max-width: 300px;
     min-width: 300px;
     width: 300px;
@@ -52,7 +52,6 @@
 }
 
 .reset-password-button {
-    cursor: pointer;
     max-width: 250px;
     min-width: 250px;
     width: 250px;
@@ -64,19 +63,9 @@
 }
 
 .forgot-password-button {
-    cursor: pointer;
     color: var(--company-primary);
 }
 
 .back-to-login-button {
-    cursor: pointer;
     color: var(--company-primary);
-}
-
-
-/* Password Reset Container */
-  
-.input-username, .input-password, .input-email {
-    width: 100%;
-    padding: 12px 1rem; /* Adjust padding to ensure the input box has space inside */
 }

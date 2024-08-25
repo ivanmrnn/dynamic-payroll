@@ -3,7 +3,281 @@
 {{end}}
 
 {{define "content"}}
-<main class="dashboard">
-    <h1>{{.Title}}</h1>
+<main class="dashboard-container flex justify-center align-center">
+    <section class="dashboard flex column big-gap fill-container">
+        <div class="dashboard-first-row flex space-between big-gap">
+            <h1 class="sr-only">{{.Title}}</h1>
+            <!-- Recent Payroll -->
+            <section class="recent-payroll-container flex column small-gap radius soft-shadow">
+                <h2 class="text-large capitalize">Recent Payroll</h2>
+                <div class="recent-payroll flex column space-between gap fill-container">
+                    <div class="flex space-between big-gap">
+                        <div class="latest-payroll flex column small-gap">
+                            <h3 class="light capitalize">Latest Payroll</h3>
+                            <span class="text-large medium capitalize">08/31/24</span>
+                        </div>
+                        <div class="earnings flex column small-gap">
+                            <h3 class="light capitalize">Earnings</h3>
+                            <span class="text-large medium">₱45,000.00</span>
+                        </div>
+                    </div>
+                    <div class="flex space-between big-gap">
+                        <div class="deductions flex column small-gap">
+                            <h3 class="light capitalize">Deductions</h3>
+                            <span class="text-large medium">₱8,650.00</span>
+                        </div>
+                        <div class="net-pay flex column small-gap">
+                            <h3 class="light capitalize">Net Pay</h3>
+                            <span class="text-large medium">₱36,350.00</span>
+                        </div>
+                    </div>
+                    <button class="view-payroll-history-button flex justify-center radius pointer">
+                        <strong class="capitalize">View Payroll History</strong>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Upcoming Payroll -->
+            <section class="upcoming-payroll-container flex column small-gap radius soft-shadow fill-container">
+                <h2 class="text-large capitalize">Upcoming Payroll</h2>
+                <div class="upcoming-payroll flex column space-between gap fill-container">
+                    <div class="flex space-between big-gap">
+                        <div class="pay-period flex column small-gap fill-container">
+                            <span class="light capitalize">Pay Period</span>
+                            <span class="text-large medium">09/01/24 - 09/15/24 </span>
+                        </div>
+                    </div>
+                    <div class="flex space-between big-gap">
+                        <div class="pay-date flex column small-gap">
+                            <span class="light capitalize">Pay Date</span>
+                            <span class="text-large medium">09/15/24</span>
+                        </div>
+                        <div class="estimated-net-pay flex column small-gap">
+                            <span class="light capitalize">Estimated Net Pay</span>
+                            <span class="text-large medium">₱36,350.00</span>
+                        </div>
+                    </div>
+                    <button class="view-payroll-button flex justify-center radius pointer">
+                        <strong class="capitalize">View Payroll</strong>
+                    </button>
+                </div>
+            </section>
+
+            <!-- YTD Earnings -->
+            <section class="ytd-earnings-container flex column small-gap radius soft-shadow">
+                <h2 class="text-large capitalize">Year-to-Date Earnings</h2>
+                <div class="ytd-earnings-chart-wrapper">
+                    <canvas class="ytd-earnings-chart"></canvas>
+                </div>
+                <button class="view-ytd-details-button flex justify-center radius pointer">
+                    <strong class="capitalize">View Details</strong>
+                </button>
+            </section>
+            
+            
+        </div>
+
+        <div class="dashboard-second-row flex space-between big-gap">
+
+            <!-- Leave Balance -->
+            <section class="leave-balance-container flex column small-gap radius soft-shadow">
+                <h2 class="text-large capitalize">Leave Balance</h2>
+                <div class="leave-balance flex column space-between gap fill-container">
+                    <div class="leave-balance-categories flex column gap">
+                        <div class="flex space-between big-gap">
+                            <div class="personal-leave flex column small-gap">
+                                <span class="light capitalize">Personal Leave</span>
+                                <span class="text-large medium capitalize">3 Days</span>
+                            </div>
+                            <div class="sick-leave flex column small-gap">
+                                <span class="light capitalize">Sick Leave</span>
+                                <span class="text-large medium capitalize">5 Days</span>
+                            </div>
+                        </div>
+                        <div class="flex space-between big-gap">
+                            <div class="vacation-leave flex column small-gap">
+                                <span class="light capitalize">Vacation Leave</span>
+                                <span class="text-large medium capitalize">8 Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="apply-for-leave-button flex justify-center radius pointer">
+                        <strong class="capitalize">Apply For Leave</strong>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Calendar -->
+            <section class="calendar-container flex column radius soft-shadow">
+                <h2 class="sr-only">Calendar</h2>
+                <div class="calendar flex fill-container" id="calendar"></div>
+            </section>
+            
+            <!-- Notifications -->
+            <section class="notifications-container flex column small-gap radius soft-shadow fill-container">
+                <h2 class="text-large capitalize">Notifications</h2>
+                <div class="notifications flex column small-gap fill-container">
+                    <div class="unread-notifications flex column small-gap">
+                        <div class="unread-notifications-header flex space-between gap">
+                            <span class="light capitalize">Unread</span>
+                            <div class="select-all-unread-notifications flex align-center gap">
+                                <span class="bold">Select All</span>
+                                <input class="pointer" type="checkbox">
+                            </div>
+                        </div>
+                        <ul class="unread-notifications-list flex column">
+                            <li class="notifications-item flex gap">
+                                <div class="notifications-icon">
+                                    <svg class="show-password-icon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"><path fill="var(--black)" d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
+                                </div>
+                                <div class="flex space-between fill-container">
+                                    <span class="medium">Sick Leave Request Approved</span>
+                                    <input class="pointer" type="checkbox">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="read-notifications flex column small-gap">
+                        <div class="read-notifications-header flex space-between gap">
+                            <span class="light capitalize">Read</span>
+                            <div class="select-all-read-notifications flex gap">
+                                <span class="bold">Select All</span>
+                                <input class="pointer" type="checkbox">
+                            </div>
+                        </div>
+                        <ul class="read-notifications-list flex column">
+                            <li class="notifications-item flex gap">
+                                <div class="notifications-icon">
+                                    <svg class="show-password-icon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"><path fill="var(--black)" d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
+                                </div>
+                                <div class="flex space-between fill-container">
+                                    <span class="medium">Sick Leave Request Approved</span>
+                                    <input class="pointer" type="checkbox">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="notifications-actions flex gap">
+                    <button class="mark-all-as-read-button pointer">
+                        <strong class="capitalize">Mark As Read</strong>
+                    </button>
+                    <button class="delete-all-notifications-button pointer">
+                        <strong class="bold capitalize">Delete</strong>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.querySelector('.ytd-earnings-chart').getContext('2d');
+
+        const monthLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+        // Bi-weekly earnings for each month
+        const biWeeklyOne = [7500, 9000, 11000, 10000, 12500, 15000, 14000, 16000, 17500, 15000, 14000, 15000];
+        const biWeeklyTwo = [7500, 9000, 11000, 10000, 12500, 15000, 14000, 16000, 17500, 15000, 14000, 15000];
+
+        // Calculate the total earnings per month by adding bi-weekly values
+        const monthlyTotals = biWeeklyOne.map((val, index) => val + biWeeklyTwo[index]);
+
+        // Find the highest total monthly earning
+        const maxMonthlyTotal = Math.max(...monthlyTotals);
+
+        // Find the lowest total monthly earning
+        const minMonthlyTotal = Math.min(...monthlyTotals);
+
+        // Chart data
+        const data = {
+            labels: monthLabels,
+            datasets: [
+                {
+                    label: 'Bi-Weekly One',
+                    data: biWeeklyOne,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Bi-Weekly Two',
+                    data: biWeeklyTwo,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        // Chart configuration
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                                font: {
+                                    size: 8,
+                                    weight: 'bold'
+                                },
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        max: maxMonthlyTotal, // Dynamically set the max value of the Y-axis to the highest monthly total
+                        ticks: {
+                            callback: function(value) {
+                                if (value === 0 || value === minMonthlyTotal || value === maxMonthlyTotal) {
+                                    return value === 0 ? '0' : value / 1000 + 'k'; // Labels for 0, minMonthlyTotal, and maxMonthlyTotal
+                                }
+                                return ''; // No label for other values
+                            },
+                            font: {
+                                size: 10,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                            drawBorder: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        };
+
+        // Create the chart
+        new Chart(ctx, config);
+
+
+        const calendar = new VanillaCalendar('#calendar');
+        calendar.init();
+    });
+    </script>
 </main>
 {{end}}

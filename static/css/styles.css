@@ -14,20 +14,62 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Poppins, sans-serif;
-    font-weight: 400;
 }
 
-h1 {
+/* Display */
+
+.flex{
+    display: flex;
+} 
+
+.column {
+    flex-direction: column;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+/* Text */
+
+h1, .text-large {
     font-size: 28px;
 }
 
-h2 {
+h2, .text-medium  {
     font-size: 24px;
 }
+
+h3 {
+    font-size: 16px;
+}
+
 
 .bold {
     font-weight: bold;
 }
+
+.medium {
+    font-weight: 500;
+}
+
+.light {
+    font-weight: 300;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+/* Gap */
 
 .big-gap {
     gap: 32px;
@@ -41,32 +83,28 @@ h2 {
     gap: 8px;
 }
 
-.flex{
-    display: flex;
-} 
-
-.justify-center {
-    justify-content: center;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.column {
-    flex-direction: column;
-}
-
-.small-radius {
-    border-radius: 8px;
-}
+/* Radius */
 
 .radius {
     border-radius: 1rem;
 }
 
-button, input, a {
+/* Cursor */
+.pointer {
+    cursor: pointer;
+}
+
+/* button, input, a */
+
+button, 
+input, 
+a {
     all: unset;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+    all: revert; 
     box-sizing: border-box;
 }
 
@@ -77,6 +115,7 @@ button:active {
 input {
     text-align: start;
 }
+
 .input-box {
     min-width: 1rem;
     justify-content: space-between;
@@ -87,11 +126,51 @@ input {
     border-radius: 8px;
 }
 
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px 1rem; 
+}
+
 .input-email::placeholder {
     color: gray;
     font-weight: 300;
 }
 
+/* Others */
+
+.hide {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+}
+
+.basic-shadow {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.soft-shadow {
+    box-shadow: 0 20px 24px -4px rgba(0, 0, 0, 0.1), 0 8px 8px -4px rgba(0, 0, 0, 0.04);
+}
+
+.fill-container {
+    flex-grow: 1;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+}
 
 /* Base */
 
@@ -109,29 +188,20 @@ input {
     width: 100%;
     padding: 1rem 2rem;
     background: white;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-.profile{
+.profile, 
+.company-container {
     height: 40px;
 }
 
-.company-container{
-    height: 40px;
-}
-
-.company-logo-container {
-    height: 40px;
-    width: 40px;
-}
-
+.company-logo-container, 
 .company-logo {
     height: 40px;
     width: 40px;
 }
 
 .header-user-border {
-    cursor: pointer;
     border-radius: 50%;
     height: 40px;
     width: 40px;
@@ -149,26 +219,25 @@ input {
 .menu {
     height: fit-content;
     min-height: 100%;
-    width: 230px;
+    width: 240px;
     padding-top: 72px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: inset -1px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .menu-item {
-    cursor: pointer;
     padding: 2rem;
     width: 100%;
-    text-transform: capitalize;
 }
 
-.menu-item:hover {
+.menu-item:hover, .menu-item.menu-button-active {
     background-color: var(--company-primary);
     color: white;
 }
 
-.menu-item:hover svg path{
+.menu-item:hover svg path, .menu-item.menu-button-active svg path{
     fill: white;
 }
+
 
 
 /* Content */
@@ -176,9 +245,9 @@ input {
 .content {
     position: fixed;
     top: 72px;
-    left: 230px;
+    left: 240px;
     height: calc(100% - 72px);
-    width: calc(100% - 230px);
+    width: calc(100% - 240px);
 }
 
 /* Modal */
@@ -204,6 +273,5 @@ input {
 }
 
 .logout-button {
-    cursor: pointer;
     color: var(--company-primary);
 }

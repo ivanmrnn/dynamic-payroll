@@ -5,52 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Title}}</title>
     <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/dashboardstyles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css">
 </head>
 <body>
-    <div class="container flex">
-        <div class="menu flex column">
-            {{range .MenuItems}}
-            <button class="menu-item flex gap">
-                <div class="menu-icon">
-                    {{.MenuIcon}}
-                </div>
-                <a href="/{{.MenuName}}">{{.MenuDisplayName}}</a> 
-            </button>
+    <header class="header flex align-center basic-shadow">
+        <div class="company-container flex align-center small-gap">
+            <!-- If there is an active company, display its logo -->
+            {{if .CompanyExists}}
+            <div class="company-logo-container flex center"  aria-label="Company logo">
+                <img class="company-logo" src="{{.CompanyLogo}}" alt="Company Logo">
+            </div>
+            <strong class="company-name text-medium capitalize" aria-label="Company name">{{.CompanyName}}</strong>
             {{end}}
         </div>
-        <div class="header flex align-center">
-            <div class="company-container flex align-center small-gap">
-                {{if .CompanyExists}}
-                <div class="company-logo-container flex center">
-                    <img class="company-logo" src="{{.CompanyLogo}}">
-                </div>
-                <h2 class="company-name bold">{{.CompanyName}}</h2>
+        <div class="profile flex align-center gap">
+            <div class="header-user-border flex justify-center align-center pointer">
+                <!-- If the user has a profile photo, display it. Else display default photo -->
+                {{if .SessionUserPhoto}}
+                <img class="header-user-photo" src="{{.SessionUserPhoto}}" alt="User Photo">
                 {{end}}
             </div>
-            <div class="profile flex align-center gap">
-                <div class="header-user-border flex justify-center align-center">
-                    {{if .SessionUserPhoto}}
-                    <img class="header-user-photo" src="{{.SessionUserPhoto}}">
-                    {{end}}
-                </div>
-                <div class="header-user-name"><p class="bold">{{.SessionUser}}</p></div>
-            </div>
+            <strong class="capitalize">{{.SessionUser}}</strong>
         </div>
+    </header>
+    
+    <main class="container flex">
+        <nav class="menu flex column">
+            <ul>
+                <!-- Display all menu buttons associated with the user role level -->
+                {{range .MenuItems}}
+                <li>
+                    <button class="menu-item {{if eq .MenuName $.ActivePage}}menu-button-active{{end}} flex capitalize gap pointer" style="transform: none">
+                        {{.MenuIcon}}
+                        <a href="/{{.MenuName}}"><strong class="capitalize">{{.MenuDisplayName}}</strong></a> 
+                    </button>
+                </li>
+                {{end}}
+            </ul>
+        </nav>
+
+        
         <div class="content">
             {{block "content" .}}{{end}}
         </div>
-    </div>
+    </main>
+
     <div id="user-modal" class="modal">
         <div class="user-modal-content radius">
             <div class="modal-container flex column big-gap">
                 <div class="modal-employee-id-container flex column small-gap">
-                    <p>Employee ID</p>
-                    <h2 id="employee-id">ID Number</h2>
+                    <span>Employee ID</span>
+                    <span class="text-medium" id="employee-id">ID Number</span>
                 </div>
                 <div class="modal-actions-container">
                     <form method="GET" action="/logout/">
-                        <button class="logout-button">
-                            <p class="bold">Logout</p>
+                        <button class="logout-button pointer">
+                            <strong class="capitalize">Logout</strong>
                         </button>
                     </form>
                 </div>
@@ -58,35 +69,34 @@
         </div>
     </div>
 
-    <script src="/static/js/theme.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Page Theme
+            let companyPrimary = '{{.CompanyPrimary}}' || '#333'; // Fallback to #333 if no CompanyPrimary
+
+            document.documentElement.style.setProperty('--company-primary', companyPrimary);
+
+            // Modal
             const userBorder = document.querySelector('.header-user-border');
             const userModal = document.getElementById("user-modal");
-            const logoutButton = document.querySelector('.logout-button');
-            const employeeIdElement = document.getElementById("employee-id");
-    
+            
+            // If user photo is clicked, display the modal
             userBorder.onclick = function() {
                 userModal.style.display = "block";
             }
-    
+
+            // If the user clicks anywhere outside the modal, close it
             window.onclick = function(event) {
                 if (event.target == userModal) {
                     userModal.style.display = "none";
                 }
             }
 
-            let companyPrimary = '{{.CompanyPrimary}}' || '#333'; // Fallback to #333 if no CompanyPrimary
-
-            document.documentElement.style.setProperty('--company-primary', companyPrimary);
+            // Display ID of user
+            const employeeIdElement = document.getElementById("employee-id");
     
             employeeIdElement.textContent = '{{.IdEmployee}}';
-    
         });
-
-        
     </script>
-    
 </body>
-
 </html>

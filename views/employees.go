@@ -9,6 +9,6 @@ import (
 func EmployeesHandler(w http.ResponseWriter, r *http.Request, session *uadmin.Session, bc BaseContext) map[string]interface{} {
 	return map[string]interface{}{
 		"Title": "Employees",
-		// Add any timesheet-specific data here
+		"ActivePage": "employees",
 	}
 }

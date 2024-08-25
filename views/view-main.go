@@ -18,7 +18,8 @@ type BaseContext struct {
 	CompanyPrimary   string
 	CompanySecondary string
 	MenuItems        []MenuItem
-	IdEmployee string
+	ActivePage       string
+	IdEmployee       string
 }
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,12 +51,11 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var employee models.Employee
-        err := uadmin.Get(&employee, "user_id = ?", session.UserID)
-        if err == nil {
-            bc.IdEmployee = employee.IdEmployee
-        }
-		
-		
+		err := uadmin.Get(&employee, "user_id = ?", session.UserID)
+		if err == nil {
+			bc.IdEmployee = employee.IdEmployee
+		}
+
 		// Generate menu items based on user roles and responsibilities
 		bc.MenuItems = GeneratePayrollMenu(session.UserID)
 
@@ -83,7 +83,7 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		LoginHandler(w, r, bc)
-	
+
 	default:
 		renderPage(w, r, page, session, bc)
 	}
@@ -99,6 +99,7 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, session *ua
 		"CompanyPrimary":   bc.CompanyPrimary,
 		"CompanySecondary": bc.CompanySecondary,
 		"MenuItems":        bc.MenuItems,
+		"ActivePage":       bc.ActivePage,
 		"IdEmployee":       bc.IdEmployee,
 	}
 
@@ -107,36 +108,36 @@ func renderPage(w http.ResponseWriter, r *http.Request, page string, session *ua
 	case "dashboard":
 		pageContext = DashboardHandler(w, r, session, bc)
 	case "timesheet":
-        pageContext = TimesheetHandler(w, r, session, bc)
+		pageContext = TimesheetHandler(w, r, session, bc)
 	case "timesheetLogs":
-        pageContext = TimesheetLogsHandler(w, r, session, bc)
+		pageContext = TimesheetLogsHandler(w, r, session, bc)
 	case "payroll":
-        pageContext = PayrollHandler(w, r, session, bc)
+		pageContext = PayrollHandler(w, r, session, bc)
 	case "payrollLogs":
-        pageContext = PayrollLogsHandler(w, r, session, bc)
+		pageContext = PayrollLogsHandler(w, r, session, bc)
 	case "leaves":
-        pageContext = LeavesHandler(w, r, session, bc)
+		pageContext = LeavesHandler(w, r, session, bc)
 	case "leavesLogs":
-        pageContext = LeavesLogsHandler(w, r, session, bc)
+		pageContext = LeavesLogsHandler(w, r, session, bc)
 	case "approvals":
-        pageContext = ApprovalsHandler(w, r, session, bc)
+		pageContext = ApprovalsHandler(w, r, session, bc)
 	case "department":
-        pageContext = DepartmentHandler(w, r, session, bc)
+		pageContext = DepartmentHandler(w, r, session, bc)
 	case "employees":
-        pageContext = EmployeesHandler(w, r, session, bc)
+		pageContext = EmployeesHandler(w, r, session, bc)
 	case "salaries":
-        pageContext = SalariesHandler(w, r, session, bc)
+		pageContext = SalariesHandler(w, r, session, bc)
 	case "roles":
-        pageContext = RolesHandler(w, r, session, bc)
+		pageContext = RolesHandler(w, r, session, bc)
 	case "identification":
-        pageContext = IdentificationHandler(w, r, session, bc)
+		pageContext = IdentificationHandler(w, r, session, bc)
 	case "auditLogs":
-        pageContext = AuditLogsHandler(w, r, session, bc)
+		pageContext = AuditLogsHandler(w, r, session, bc)
 	default:
 		page = "dashboard"
 		pageContext = DashboardHandler(w, r, session, bc)
 	}
-	
+
 	for key, value := range pageContext {
 		baseContext[key] = value
 	}
@@ -170,75 +171,75 @@ func getActiveCompany() *models.Company {
 }
 
 type MenuItem struct {
-	MenuName string
+	MenuName        string
 	MenuDisplayName string
-	MenuIcon template.HTML 
+	MenuIcon        template.HTML
 }
 
 // Add this at the package level
 var menuOrder = []string{
-    "dashboard",
-    "timesheet",
+	"dashboard",
+	"timesheet",
 	"timesheetLogs",
-    "payroll",
+	"payroll",
 	"payrollLogs",
-    "leaves",
+	"leaves",
 	"leavesLogs",
 	"approvals",
-    "department",
-    "employees",
+	"department",
+	"employees",
 	"identification",
-    "roles",
+	"roles",
 	"salaries",
-	"auditLogs",	
+	"auditLogs",
 }
 
 func GeneratePayrollMenu(userID uint) []MenuItem {
-    var employee models.Employee
-    err := uadmin.Get(&employee, "user_id = ?", userID)
-    if err != nil || employee.ID == 0 {
-        return []MenuItem{}
-    }
+	var employee models.Employee
+	err := uadmin.Get(&employee, "user_id = ?", userID)
+	if err != nil || employee.ID == 0 {
+		return []MenuItem{}
+	}
 
-    menuItems := make(map[string]MenuItem)
+	menuItems := make(map[string]MenuItem)
 
-    for _, role := range employee.Role {
-        var roleResponsibilities []models.RoleResponsibility
-        uadmin.Filter(&roleResponsibilities, "role_id = ?", role.ID)
+	for _, role := range employee.Role {
+		var roleResponsibilities []models.RoleResponsibility
+		uadmin.Filter(&roleResponsibilities, "role_id = ?", role.ID)
 
-        for _, roleResp := range roleResponsibilities {
-            var responsibility models.Responsibility
-            err := uadmin.Get(&responsibility, "id = ?", roleResp.ResponsibilityID)
-            if err != nil {
-                continue
-            }
+		for _, roleResp := range roleResponsibilities {
+			var responsibility models.Responsibility
+			err := uadmin.Get(&responsibility, "id = ?", roleResp.ResponsibilityID)
+			if err != nil {
+				continue
+			}
 
-            var menuName models.MenuName
-            err = uadmin.Get(&menuName, "id = ?", responsibility.MenuNameID)
-            if err != nil {
-                continue
-            }
+			var menuName models.MenuName
+			err = uadmin.Get(&menuName, "id = ?", responsibility.MenuNameID)
+			if err != nil {
+				continue
+			}
 
-            menuIcon := template.HTML(UnescapeSVG(menuName.MenuIcon))
+			menuIcon := template.HTML(UnescapeSVG(menuName.MenuIcon))
 
-            // Use menuName.DisplayName for MenuDisplayName
-            menuItems[menuName.Name] = MenuItem{
-                MenuName:        menuName.Name,
-                MenuDisplayName: menuName.DisplayName, // Use menuName.DisplayName here
-                MenuIcon:        menuIcon,
-            }
-        }
-    }
+			// Use menuName.DisplayName for MenuDisplayName
+			menuItems[menuName.Name] = MenuItem{
+				MenuName:        menuName.Name,
+				MenuDisplayName: menuName.DisplayName, // Use menuName.DisplayName here
+				MenuIcon:        menuIcon,
+			}
+		}
+	}
 
-    // Sort menu items according to the predefined order
-    result := make([]MenuItem, 0, len(menuItems))
-    for _, menuName := range menuOrder {
-        if item, exists := menuItems[menuName]; exists {
-            result = append(result, item)
-        }
-    }
+	// Sort menu items according to the predefined order
+	result := make([]MenuItem, 0, len(menuItems))
+	for _, menuName := range menuOrder {
+		if item, exists := menuItems[menuName]; exists {
+			result = append(result, item)
+		}
+	}
 
-    return result
+	return result
 }
 
 func CheckResponsibilitiesAndMenuNames() {

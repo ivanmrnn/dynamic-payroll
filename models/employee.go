@@ -19,6 +19,8 @@ type Employee struct {
 
 	Password string `uadmin:"password;list_exclude"`
 
+	Photo string `uadmin:"image;list_exclude"`
+
 	DateOfBirth time.Time
 	Email       string
 
@@ -61,6 +63,7 @@ func (e *Employee) Save() {
 			Password:  e.Password,
 			Email:     e.Email,
 			Active:    true,
+			Photo: e.Photo,
 		}
 	} else {
 		// User exists, update their details
@@ -69,6 +72,7 @@ func (e *Employee) Save() {
 		user.Password = e.Password
 		user.Email = e.Email
 		user.Active = true
+		user.Photo = e.Photo
 	}
 
 	// Set admin privileges for the system admin

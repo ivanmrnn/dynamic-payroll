@@ -1,0 +1,94 @@
+.dashboard-container {
+    background: #F5F5F5;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+}
+
+.dashboard-first-row {
+    height: 350px;
+    width: 100%;
+}
+
+.dashboard-second-row {
+    height: 350px;
+    width: 100%;
+}
+
+/* Recent Payroll, Upcoming Payroll, Notifications, Leave Balance */
+
+.recent-payroll-container, 
+.upcoming-payroll-container, 
+.notifications-container,
+.leave-balance-container,
+.ytd-earnings-container {
+    height: 100%;
+    padding: 2rem;
+    background: white;
+}
+
+.recent-payroll-container h2, 
+.upcoming-payroll-container h2, 
+.notifications-container h2,
+.leave-balance-container h2,
+.ytd-earnings-container h2,
+
+.select-all-unread-notifications,
+.select-all-read-notifications,
+.mark-all-as-read-button {
+    color: var(--company-primary);
+}
+
+.delete-all-notifications-button {
+    color: var(--red);
+}
+
+.pay-date {
+    width: 120px;
+}
+
+.latest-payroll, .earnings, .deductions, .net-pay, .estimated-net-pay {
+    width: 200px;
+}
+
+.view-payroll-history-button, .view-payroll-button, .apply-for-leave-button, .view-ytd-details-button {
+    padding: 1rem;
+    background: var(--company-primary);
+    color: white;
+}
+
+.notifications {
+    overflow-y: auto;
+}
+
+.notifications-actions {
+    justify-content: end;
+    align-items: end;
+}
+
+.ytd-earnings-container {
+    overflow: hidden; 
+}
+
+.ytd-earnings-chart-wrapper {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    min-height: 0;
+}
+
+.ytd-earnings-chart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 40px; 
+}
+
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: white;
+    padding: 1rem;
+}

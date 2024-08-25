@@ -8,64 +8,84 @@
     <link rel="stylesheet" href="/static/css/loginstyles.css">
 </head>
 <body>
-    <div class="login flex justify-center align-center">
+    <main class="login flex justify-center align-center">
+        <!-- Company Logo -->
+        <!-- If there is an active company, display its logo -->
         {{if .CompanyExists}}
         <div class="company flex center">
-            <h2 class="company-name bold">{{.CompanyName}}</h2>
+            <strong class="company-name text-medium capitalize" aria-label="Company name">{{.CompanyName}}</strong>
         </div>
         {{end}}
+        
         <!-- Login Container -->
-        <div id="login-container" class="login-container flex justify-center align-center column big-gap radius">
-            <h1 class="bold">Payroll System</h1>
+        <section id="login-container" class="login-container flex column justify-center align-center big-gap radius soft-shadow">
+            <h1 class="capitalize">Payroll System</h1>
             <form action="/login" class="login-form flex column gap" method="post">
                 <div class="input-box">
+                    <label for="login-username" class="capitalize hide">Username</label>
                     <input class="input-username" id="login-username" name="username" type="text" placeholder="Username">
                 </div>
                 <div class="input-box flex">
+                    <label for="login-password" class="hide capitalize">Password</label>
                     <input class="input-password" id="login-password" name="password" type="password" placeholder="Password">
-                    <button type="button" class="reveal-password-button flex center">
+                    <button type="button" class="reveal-password-button flex pointer" aria-label="Toggle password visibility">
                         <svg class="show-password-icon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"><path fill="var(--black)" d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
                         <svg class="hide-password-icon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" style="display:none;"><path fill="var(--black)" d="M11.83 9L15 12.16V12a3 3 0 0 0-3-3zm-4.3.8l1.55 1.55c-.05.21-.08.42-.08.65a3 3 0 0 0 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53a5 5 0 0 1-5-5c0-.79.2-1.53.53-2.2M2 4.27l2.28 2.28l.45.45C3.08 8.3 1.78 10 1 12c1.73 4.39 6 7.5 11 7.5c1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22L21 20.73L3.27 3M12 7a5 5 0 0 1 5 5c0 .64-.13 1.26-.36 1.82l2.93 2.93c1.5-1.25 2.7-2.89 3.43-4.75c-1.73-4.39-6-7.5-11-7.5c-1.4 0-2.74.25-4 .7l2.17 2.15C10.74 7.13 11.35 7 12 7"/></svg>
                     </button>
                 </div>
+                <!-- If log-in information are wrong, show error text-->
                 {{if .ErrExists}}
                 <div class="errorhandler flex justify-center">
-                    <p>{{.Err}}</p>
+                    <span>{{.Err}}</span>
                 </div>
                 {{end}}
-                <button class="login-button flex justify-center align-center radius" type="submit"><p class="bold">Sign In</p></button>
+                <button class="login-button flex justify-center align-center radius pointer" type="submit">
+                    <strong class="capitalize">Sign In</strong>
+                </button>
             </form>
-            <button class="forgot-password-button"><p class="bold">Forgot Password</p></button>
-        </div>
+            <button class="forgot-password-button pointer">
+                <strong class="capitalize">Forgot Password</strong>
+            </button>
+        </section>
 
         <!-- Request Reset Container -->
-        <div id="request-reset-container" class="login-container flex justify-center align-center column big-gap radius" style="display:none;">
-            <h1 class="bold">Request Reset </h1>
+        <section id="request-reset-container" class="login-container flex column justify-center align-center big-gap radius soft-shadow" style="display:none;">
+            <h1 class="capitalize">Request Reset</h1>
             <form class="request-reset-form flex column gap" method="post">
                 <div class="input-box">
+                    <label for="reset-email" class="capitalize hide">Email</label>
                     <input class="input-email" id="reset-email" name="email" type="email" placeholder="Email">
                 </div>
                 
             </form>
-            <button class="request-reset-button flex justify-center align-center radius" type="submit"><p class="bold">Request Reset</p></button>
-            <button class="back-to-login-button"><p class="bold">Back to Login</p></button>
-        </div>
+            <button class="request-reset-button flex justify-center align-center radius pointer" type="submit">
+                <strong class="capitalize">Request Reset</strong>
+            </button>
+            <button class="back-to-login-button pointer">
+                <strong class="capitalize">Back To Login</strong>
+            </button>
+        </section>
 
         <!-- Reset Password Container -->
-        <div id="reset-password-container" class="login-container flex justify-center align-center column big-gap radius" style="display:none;">
-            <h1 class="bold">Verification Code</h1>
+        <section id="reset-password-container" class="login-container flex column justify-center align-center big-gap radius soft-shadow" style="display:none;">
+            <h1 class="capitalize">Verification Code</h1>
             <form class="reset-password-form flex column gap" method="post">
                 <div class="otp-inputs flex align-center gap"> 
-                    <input id="otp1" class="input-box" type="text" maxlength="1"> 
-                    <input id="otp2" class="input-box" type="text" maxlength="1"> 
-                    <input id="otp3" class="input-box" type="text" maxlength="1"> 
-                    <input id="otp4" class="input-box" type="text" maxlength="1"> 
+                    <input id="otp1" class="input-box" type="text" maxlength="1" aria-label="First digit of verification code"> 
+                    <input id="otp2" class="input-box" type="text" maxlength="1" aria-label="Second digit of verification code"> 
+                    <input id="otp3" class="input-box" type="text" maxlength="1" aria-label="Third digit of verification code"> 
+                    <input id="otp4" class="input-box" type="text" maxlength="1" aria-label="Fourth digit of verification code"> 
                 </div> 
-                <button class="reset-password-button flex justify-center align-center radius" type="submit"><p class="bold">Verify Code</p></button>
+                <button class="reset-password-button flex justify-center align-center radius pointer" type="submit">
+                    <strong class="capitalize">Verify Code</strong>
+                </button>
             </form>
-            <button class="back-to-login-button"><p class="bold">Back to Login</p></button>
-        </div>
-    </div>
+            <button class="back-to-login-button pointer">
+                <strong class="capitalize">Back To Login</strong>
+            </button>
+        </section>
+
+    </main>
 
     <script>
         const loginContainer = document.getElementById('login-container');
@@ -84,6 +104,7 @@
         const forgotPasswordButton = document.querySelector('.forgot-password-button');
         const backToLoginButton = document.querySelector('.back-to-login-button');
     
+        // Reveal password when icon is clicked
         revealPasswordButton.addEventListener('click', () => {
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -114,6 +135,7 @@
             });
         });
 
+        // Page Theme
         let companyPrimary = '{{.CompanyPrimary}}' || '#333'; // Fallback to #333 if no CompanyPrimary
 
         document.documentElement.style.setProperty('--company-primary', companyPrimary);

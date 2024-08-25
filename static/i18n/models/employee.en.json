@@ -92,6 +92,13 @@
       "err_msg": {},
       "Choices": {}
     },
+    "Photo": {
+      "display_name": "Photo",
+      "help": "",
+      "pattern_msg": "",
+      "err_msg": {},
+      "Choices": {}
+    },
     "Position": {
       "display_name": "Position",
       "help": "",
