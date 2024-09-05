@@ -190,6 +190,7 @@ func createResponsibility(responsibilityName, menuName, menuDisplayName, menuIco
 }
 // Set responsibilities based on role level
 func SetResponsibilitiesForLevel(role *Role) {
+    // Map defining responsibilities based on role levels.
     responsibilitiesByLevel := map[uint][]string{
         1: {"View Dashboard", "View Timesheet", "View Payroll", "View and Request Leave"},
         2: {"View Dashboard", "View Timesheet", "View Payroll", "View and Request Leave", "View Department"},
@@ -197,22 +198,28 @@ func SetResponsibilitiesForLevel(role *Role) {
         4: {"View Dashboard", "View Timesheet Logs", "View Payroll Logs", "View Leave Logs", "View Employee", "Manage Employee", "Add Employee", "Manage Identification Format", "Manage Roles", "Manage Salaries", "Manage Deductions", "Manage Company Deductions", "View Audit Logs"},
     }
 
+     // Retrieve the responsibilities for the given role level.
     responsibilities, exists := responsibilitiesByLevel[role.Level]
     if !exists {
-        return // No responsibilities defined for this level
+        // If the role level does not exist in the map, exit the function.
+        return 
     }
 
+    // Fetch the existing RoleResponsibility record for the role.
     var roleResponsibility RoleResponsibility
     err := uadmin.Get(&roleResponsibility, "role_id = ?", role.ID)
     if err != nil || roleResponsibility.ID == 0 {
+        // If no record exists, initialize a new RoleResponsibility.
         roleResponsibility = RoleResponsibility{
             RoleID: role.ID,
         }
     }
 
+    // Iterate over each responsibility and handle it.
     for _, responsibilityName := range responsibilities {
         // Fetch the responsibility data from the common map
         menuInfo, found := CommonResponsibilities[responsibilityName]
+        // Default values if the responsibility is not found in the common map.
         if !found {
             menuInfo = struct {
                 MenuName        string
@@ -226,6 +233,7 @@ func SetResponsibilitiesForLevel(role *Role) {
             }
         }
 
+        // Handle the creation and association of the responsibility.
         handleResponsibility(&roleResponsibility, responsibilityName, menuInfo.MenuName, menuInfo.MenuDisplayName, menuInfo.MenuIcon)
     }
 
@@ -233,22 +241,28 @@ func SetResponsibilitiesForLevel(role *Role) {
     roleResponsibility.Save()
 }
 
-// handleResponsibility handles the creation and association of a responsibility
+// handleResponsibility handles the creation and association of a responsibility for a role.
+// It checks if the responsibility already exists and is associated with the role.
+// If not, it creates the responsibility and associates it with the role.
 func handleResponsibility(roleResponsibility *RoleResponsibility, responsibilityName, menuName, menuDisplayName, menuIcon string) {
+    // Fetch the responsibility from the database.
     var responsibility Responsibility
     err := uadmin.Get(&responsibility, "name = ?", responsibilityName)
     if err != nil || responsibility.ID == 0 {
+         // If no responsibility exists, create a new one.
         createResponsibility(responsibilityName, menuName, menuDisplayName, menuIcon)
+        // Fetch the newly created responsibility.
         uadmin.Get(&responsibility, "name = ?", responsibilityName)
     }
 
     // Check if the responsibility is already associated with the role
     for _, r := range roleResponsibility.Responsibility {
         if r.ID == responsibility.ID {
+            // If already associated, exit the function.
             return 
         }
     }
 
-    // If it's a new responsibility, append it
+    // If it's a new responsibility, add it to the role.
     roleResponsibility.Responsibility = append(roleResponsibility.Responsibility, responsibility)
 }

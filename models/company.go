@@ -14,6 +14,8 @@ type Company struct {
 }
 
 func (c *Company) Save(){
+
+	// If the`active` of the company being saved is true, set all other companies as inactive.
 	if c.Active {
 		company := []Company{}
 		uadmin.Filter(&company, "active = ?", true)
@@ -25,6 +27,7 @@ func (c *Company) Save(){
 		}
 	}
 
+	//makes sure that `active` is set to false when it is set to false  
 	if !c.Active {
 		c.Active = false
 	}

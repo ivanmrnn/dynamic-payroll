@@ -34,6 +34,7 @@ func main() {
 	uadmin.StartServer()
 }
 
+// createAdminRoleAndUser checks if an admin role and user already exist. If they don't, it creates an entry for the admin at the role and employees database.
 func createAdminRoleAndUser() {
     // Create admin role
     var adminRole models.Role
@@ -60,7 +61,9 @@ func createAdminRoleAndUser() {
             Password:   "admin",
             Active:     true,
         }
-        adminUser.Role = append(adminUser.Role, adminRole)
+
+        // Assign the admin role to the user
+        adminUser.Role = append(adminUser.Role, adminRole) 
         adminUser.Save()
     }
 }

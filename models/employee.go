@@ -24,10 +24,10 @@ type Employee struct {
 	DateOfBirth time.Time
 	Email       string
 
-	SSS        string
-	Tin        string
-	PhilHealth string
-	PagIbig    string
+	SSS        string `uadmin:"list_exclude"`
+	Tin        string `uadmin:"list_exclude"`
+	PhilHealth string `uadmin:"list_exclude"`
+	PagIbig    string `uadmin:"list_exclude"`
 
 	Role       []Role `gorm:"many2many:employee_roles;"`
 
@@ -35,11 +35,9 @@ type Employee struct {
 	Department       []Department     `gorm:"many2many:employee_departments;"`
 	Team             []Team           `gorm:"many2many:employee_teams;"`
 
-	Active bool `uadmin:"list_exclude"`
+	Active bool 
 }
 
-// Save method for the Employee model
-// Save method for the Employee model
 func (e *Employee) Save() {
 	e.Name = e.FirstName + " " + e.LastName
 

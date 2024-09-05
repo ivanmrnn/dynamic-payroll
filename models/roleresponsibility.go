@@ -12,7 +12,6 @@ type RoleResponsibility struct {
 
 func (rr *RoleResponsibility) Save() {
 
-    // Manually manage many-to-many relationships
     for _, responsibility := range rr.Responsibility {
         // Check if the RoleResponsibility already exists
         var existing RoleResponsibility
