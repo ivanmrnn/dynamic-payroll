@@ -57,7 +57,7 @@ func createAdminRoleAndUser() {
             IdEmployee: "admin",
             FirstName:  "System",
             LastName:   "Admin",
-            Password:   "admin", // Change this to a secure password
+            Password:   "admin",
             Active:     true,
         }
         adminUser.Role = append(adminUser.Role, adminRole)

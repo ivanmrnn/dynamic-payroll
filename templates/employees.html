@@ -4,24 +4,108 @@
 
 {{define "content"}}
 <main class="employees">
-    <h1>{{.Title}}</h1>
+    <h1 class="sr-only">{{.Title}}</h1>
 
-    <div class="tabs">
-        <button class="tab-button active" onclick="showTab('employees')">Employees</button>
-        <button class="tab-button" onclick="showTab('teams')">Teams</button>
-        <button class="tab-button" onclick="showTab('departments')">Departments</button>
+    <nav class="tab-list flex align-center small-gap">
+        <button class="flex tab-button pointer active" data-tab="employees"><strong class="text-large">Employees</strong></button>
+        <div class="tab-divider"></div>
+        <button class="flex tab-button pointer" data-tab="teams"><strong class="text-large">Teams</strong></button>
+        <div class="tab-divider"></div>
+        <button class="flex tab-button pointer" data-tab="departments"><strong class="text-large">Departments</strong></button>
+    </nav>
+
+    <div id="employees" class="tab-content column big-gap" style="display: flex;">
+        <div class="employee-action-bar flex big-gap">
+            <form action="#" method="get">
+                <div class="input-box">
+                    <input class="input-search" id="employee-search" name="search" type="text" placeholder="Search">
+                </div>
+            </form>
+            <button class="add-employee-button flex justify-center radius pointer">
+                <strong class="capitalize">Add Employee</strong>
+            </button>
+        </div>
+
+        <table class="employee-table">
+            <thead class="table-head">
+                <tr class="header-row flex space-between">
+                    <th><strong>ID</strong></th>
+                    <th><strong>Photo</strong></th>
+                    <th><strong>Name</strong></th>
+                    <th><strong>Department</strong></th>
+                    <th><strong>Teams</strong></th>
+                    <th><strong>Position</strong></th>
+                    <th><strong>Role</strong></th>
+                    <th><strong>Status</strong></th>
+                    <th><strong>Actions</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- {{range .Employees}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td><img src="{{.Photo}}" alt="Employee Photo" width="50"></td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Department}}</td>
+                    <td>{{.Teams}}</td>
+                    <td>{{.Position}}</td>
+                    <td>{{.Role}}</td>
+                    <td>{{.Status}}</td>
+                    <td>
+                        <button class="edit-employee-button">Edit</button>
+                        <button class="delete-employee-button">Delete</button>
+                    </td>
+                </tr>
+                {{end}} -->
+            </tbody>
+            
+        </table>
     </div>
-
-    <div id="employees" class="tab-content active">
-        <!-- Employees content -->
+    
+    <div id="teams" class="tab-content" style="display: none;">
+        Teams
     </div>
-
-    <div id="teams" class="tab-content">
-        <!-- Teams content -->
-    </div>
-
-    <div id="departments" class="tab-content">
-        <!-- Departments content -->
+    
+    <div id="departments" class="tab-content" style="display: none;">
+        Departments
     </div>
 </main>
+<script>
+    function showTab(tabId) {
+        const buttons = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+        const dividers = document.querySelectorAll('.tab-divider');
+
+        // Remove active class from all buttons and hide all contents
+        buttons.forEach(button => button.classList.remove('active'));
+        contents.forEach(content => content.style.display = 'none');
+
+        // Show the selected tab content and set the button as active
+        document.getElementById(tabId).style.display = 'flex';
+        document.querySelector(`button[data-tab="${tabId}"]`).classList.add('active');
+
+        // Handle dividers
+        const activeIndex = Array.from(buttons).findIndex(button => button.classList.contains('active'));
+        dividers.forEach((divider, index) => {
+            if (activeIndex === 0 && index === 1) {
+                divider.style.display = 'flex';
+            } else if (activeIndex === 2 && index === 0) {
+                divider.style.display = 'flex';
+            } else {
+                divider.style.display = 'none';
+            }
+        });
+    }
+
+    // Initial setup
+    showTab('employees');
+
+    // Add click event listeners to buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            showTab(this.getAttribute('data-tab'));
+        });
+    });
+
+</script>
 {{end}}
